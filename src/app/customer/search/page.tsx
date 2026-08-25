@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { Suspense, useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { SlidersHorizontal, MapPin } from "lucide-react";
 import { useSearchStore } from "@/stores/search-store";
@@ -30,7 +30,15 @@ import {
 } from "@/components/ui/dialog";
 import type { ProviderSortOption } from "@/types/provider";
 
-export default function CustomerSearchPage() {
+export default function CustomerSearchPageRoute() {
+  return (
+    <Suspense fallback={<div className="space-y-6"><div className="h-10 w-40 rounded bg-muted animate-pulse" /><div className="h-14 w-full rounded bg-muted animate-pulse" /></div>}>
+      <CustomerSearchPage />
+    </Suspense>
+  );
+}
+
+function CustomerSearchPage() {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") ?? "";
   const { query, setQuery, filters, setFilters, location, recentSearches } = useSearchStore();

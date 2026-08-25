@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect } from "react";
+import { Suspense, use, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,7 +35,19 @@ const bookingSchema = z.object({
 
 type BookingFormData = z.infer<typeof bookingSchema>;
 
-export default function BookProviderPage({
+export default function BookProviderPageRoute({
+  params,
+}: {
+  params: Promise<{ providerId: string }>;
+}) {
+  return (
+    <Suspense fallback={<Skeleton className="h-96 w-full max-w-2xl mx-auto" />}>
+      <BookProviderPage params={params} />
+    </Suspense>
+  );
+}
+
+function BookProviderPage({
   params,
 }: {
   params: Promise<{ providerId: string }>;
