@@ -56,7 +56,7 @@ export function SearchBar({
           </div>
         )}
         <Button type="submit" size="lg" className="shrink-0">
-          Find Professionals
+          Search
         </Button>
       </div>
     </form>
