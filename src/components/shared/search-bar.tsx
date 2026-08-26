@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { Search, MapPin } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { useSearchStore } from "@/stores/search-store";
 
 interface SearchBarProps {
