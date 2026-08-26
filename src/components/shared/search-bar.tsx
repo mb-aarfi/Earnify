@@ -55,9 +55,6 @@ export function SearchBar({
             <span className="truncate">{location.city}, {location.state}</span>
           </div>
         )}
-        <Button type="submit" size="lg" className="shrink-0">
-          Search
-        </Button>
       </div>
     </form>
   );
