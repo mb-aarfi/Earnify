@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Users, Briefcase } from "lucide-react";
 import { setSession, getDefaultUserId } from "@/lib/session";
@@ -9,6 +9,8 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function AuthPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const selectedRole = searchParams.get("role") === "provider" ? "provider" : "customer";
 
   const handleRoleSelect = (role: "customer" | "provider") => {
     setSession({
@@ -34,7 +36,9 @@ export default function AuthPage() {
 
         <div className="grid sm:grid-cols-2 gap-6">
           <Card
-            className="cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-primary/50"
+            className={`cursor-pointer hover:shadow-lg transition-shadow border-2 ${
+              selectedRole === "customer" ? "border-primary shadow-md" : "border-transparent hover:border-primary/50"
+            }`}
             onClick={() => handleRoleSelect("customer")}
           >
             <CardContent className="p-8 text-center">
@@ -52,7 +56,9 @@ export default function AuthPage() {
           </Card>
 
           <Card
-            className="cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-primary/50"
+            className={`cursor-pointer hover:shadow-lg transition-shadow border-2 ${
+              selectedRole === "provider" ? "border-primary shadow-md" : "border-transparent hover:border-primary/50"
+            }`}
             onClick={() => handleRoleSelect("provider")}
           >
             <CardContent className="p-8 text-center">

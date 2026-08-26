@@ -90,10 +90,10 @@ export default function LandingPage() {
               </div>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button size="lg" asChild>
-                  <Link href="/customer/search">Find a Service</Link>
+                  <Link href="/auth?role=customer">Find a Service</Link>
                 </Button>
                 <Button size="lg" variant="outline" asChild>
-                  <Link href="/auth">Become a Service Provider</Link>
+                  <Link href="/auth?role=provider">Become a Service Provider</Link>
                 </Button>
               </div>
             </div>
@@ -199,7 +199,7 @@ export default function LandingPage() {
             Join Earnify, showcase your services and connect with customers who need your expertise.
           </p>
           <Button size="lg" variant="secondary" className="mt-8" asChild>
-            <Link href="/auth">Become a Service Provider</Link>
+            <Link href="/auth?role=provider">Become a Service Provider</Link>
           </Button>
         </div>
       </section>
