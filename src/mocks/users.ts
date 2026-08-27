@@ -5,7 +5,7 @@ export const mockCustomer: CustomerProfile = {
   name: "Ali Hassan",
   email: "ali.hassan@email.com",
   phone: "+919876543210",
-  profileImage: "https://i.pravatar.cc/150?u=customer1",
+  profileImage: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
   role: "customer",
   createdAt: "2024-06-15T10:00:00Z",
   addresses: [
@@ -45,7 +45,7 @@ export const mockProviderUser = {
   name: "Baqir Khan",
   email: "baqir.khan@email.com",
   phone: "+919999888877",
-  profileImage: "https://i.pravatar.cc/150?u=provider1",
+  profileImage: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
   role: "provider" as const,
   createdAt: "2023-03-20T08:00:00Z",
 };

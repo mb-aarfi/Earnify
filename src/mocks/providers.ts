@@ -1,11 +1,7 @@
 import type { Provider } from "@/types/provider";
 
-const portfolioImages = [
-  "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=400",
-  "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400",
-  "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400",
-  "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400",
-];
+const singleProfileImage = "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80";
+const portfolioImages = [singleProfileImage];
 
 export const mockProviders: Provider[] = [
   {
@@ -13,7 +9,7 @@ export const mockProviders: Provider[] = [
     userId: "user_provider_1",
     name: "Muhammad Baqir",
     businessName: "Baqir Electrical Services",
-    profileImage: "https://i.pravatar.cc/150?u=provider1",
+    profileImage: singleProfileImage,
     categoryId: "cat_electrician",
     categoryName: "Electrician",
     bio: "Licensed electrician with 8 years of experience in residential and commercial electrical work. Specializing in wiring, switch repairs, and fan installations across Lucknow.",
@@ -37,7 +33,7 @@ export const mockProviders: Provider[] = [
     availableToday: true,
     phone: "+919999888877",
     email: "baqir.muha@gmail.com",
-    portfolioImages: portfolioImages.slice(0, 3),
+    portfolioImages: [singleProfileImage],
     totalBookings: 342,
     services: [
       {
@@ -80,7 +76,7 @@ export const mockProviders: Provider[] = [
     userId: "user_provider_2",
     name: "Zafar Ali",
     businessName: "Ali Plumbing Solutions",
-    profileImage: "https://i.pravatar.cc/150?u=provider2",
+    profileImage: singleProfileImage,
     categoryId: "cat_plumber",
     categoryName: "Plumber",
     bio: "Expert plumber handling leak repairs, bathroom fittings, and pipeline installations. Trusted by 200+ families in Noida.",
@@ -104,7 +100,7 @@ export const mockProviders: Provider[] = [
     availableToday: true,
     phone: "+919888777666",
     email: "zafar@gmail.com",
-    portfolioImages: portfolioImages.slice(1, 4),
+    portfolioImages: [singleProfileImage],
     totalBookings: 215,
     services: [
       {
@@ -135,7 +131,7 @@ export const mockProviders: Provider[] = [
     id: "prov_3",
     userId: "user_provider_3",
     name: "Saif Husain",
-    profileImage: "https://i.pravatar.cc/150?u=provider3",
+    profileImage: singleProfileImage,
     categoryId: "cat_mechanic",
     categoryName: "Mechanic",
     bio: "Automobile mechanic specializing in two-wheeler and car servicing. Mobile service available across Delhi NCR.",
@@ -159,7 +155,7 @@ export const mockProviders: Provider[] = [
     availableToday: false,
     phone: "+919777666555",
     email: "saif.husain@email.com",
-    portfolioImages: portfolioImages,
+    portfolioImages: [singleProfileImage],
     totalBookings: 178,
     services: [
       {
@@ -191,7 +187,7 @@ export const mockProviders: Provider[] = [
     userId: "user_provider_4",
     name: "Sanad Hussain",
     businessName: "Hussain Tutoring Center",
-    profileImage: "https://i.pravatar.cc/150?u=provider4",
+    profileImage: singleProfileImage,
     categoryId: "cat_teacher",
     categoryName: "Teacher",
     bio: "CBSE and ICSE tutor for classes 6-12. Specializing in Mathematics and Science with proven results.",
@@ -247,7 +243,7 @@ export const mockProviders: Provider[] = [
     userId: "user_provider_5",
     name: "Hamza Zahid",
     businessName: "Zahid Web Studio",
-    profileImage: "https://i.pravatar.cc/150?u=provider5",
+    profileImage: singleProfileImage,
     categoryId: "cat_developer",
     categoryName: "Developer",
     bio: "Full-stack developer building websites and mobile apps for small businesses. React, Next.js, and Node.js expert.",
@@ -271,7 +267,7 @@ export const mockProviders: Provider[] = [
     availableToday: true,
     phone: "+919555444333",
     email: "arjun.patel@email.com",
-    portfolioImages: portfolioImages.slice(0, 2),
+    portfolioImages: [singleProfileImage],
     totalBookings: 68,
     services: [
       {
@@ -302,7 +298,7 @@ export const mockProviders: Provider[] = [
     id: "prov_6",
     userId: "user_provider_6",
     name: "Karim Qadir",
-    profileImage: "https://i.pravatar.cc/150?u=provider6",
+    profileImage: singleProfileImage,
     categoryId: "cat_ac_repair",
     categoryName: "AC Repair",
     bio: "Certified AC technician for all major brands. Installation, servicing, gas refilling, and repair.",
@@ -326,7 +322,7 @@ export const mockProviders: Provider[] = [
     availableToday: true,
     phone: "+919444333222",
     email: "suresh.yadav@email.com",
-    portfolioImages: portfolioImages.slice(2, 4),
+    portfolioImages: [singleProfileImage],
     totalBookings: 256,
     services: [
       {
@@ -358,7 +354,7 @@ export const mockProviders: Provider[] = [
     userId: "user_provider_7",
     name: "Yusuf Siddiq",
     businessName: "Siddiq Woodworks",
-    profileImage: "https://i.pravatar.cc/150?u=provider7",
+    profileImage: singleProfileImage,
     categoryId: "cat_carpenter",
     categoryName: "Carpenter",
     bio: "Skilled carpenter for furniture repair, custom cabinets, and door installations.",
@@ -382,7 +378,7 @@ export const mockProviders: Provider[] = [
     availableToday: false,
     phone: "+919333222111",
     email: "ramesh.kumar@email.com",
-    portfolioImages: portfolioImages,
+    portfolioImages: [singleProfileImage],
     totalBookings: 134,
     services: [
       {
@@ -413,7 +409,7 @@ export const mockProviders: Provider[] = [
     id: "prov_8",
     userId: "user_provider_8",
     name: "Amir Faris",
-    profileImage: "https://i.pravatar.cc/150?u=provider8",
+    profileImage: singleProfileImage,
     categoryId: "cat_painter",
     categoryName: "Painter",
     bio: "Professional painter for interior and exterior projects. Quality finishes with premium paints.",
@@ -437,7 +433,7 @@ export const mockProviders: Provider[] = [
     availableToday: true,
     phone: "+919222111000",
     email: "deepak.gupta@email.com",
-    portfolioImages: portfolioImages.slice(0, 3),
+    portfolioImages: [singleProfileImage],
     totalBookings: 112,
     services: [
       {
@@ -469,7 +465,7 @@ export const mockProviders: Provider[] = [
     userId: "user_provider_9",
     name: "Aisha Noor",
     businessName: "Noor Clean Services",
-    profileImage: "https://i.pravatar.cc/150?u=provider9",
+    profileImage: singleProfileImage,
     categoryId: "cat_cleaner",
     categoryName: "Cleaner",
     bio: "Professional home deep cleaning with eco-friendly products. Kitchen, bathroom, and full home packages.",
@@ -493,7 +489,7 @@ export const mockProviders: Provider[] = [
     availableToday: true,
     phone: "+919111000999",
     email: "sunita.devi@email.com",
-    portfolioImages: portfolioImages.slice(1, 3),
+    portfolioImages: [singleProfileImage],
     totalBookings: 189,
     services: [
       {
@@ -524,7 +520,7 @@ export const mockProviders: Provider[] = [
     id: "prov_15",
     userId: "user_provider_15",
     name: "Omer Yaseen",
-    profileImage: "https://i.pravatar.cc/150?u=provider15",
+    profileImage: singleProfileImage,
     categoryId: "cat_mechanic",
     categoryName: "Mechanic",
     bio: "Car mechanic with expertise in engine diagnostics, brake service, and periodic maintenance.",
@@ -548,7 +544,7 @@ export const mockProviders: Provider[] = [
     availableToday: true,
     phone: "+918555444333",
     email: "amit.joshi@email.com",
-    portfolioImages: portfolioImages.slice(1, 3),
+    portfolioImages: [singleProfileImage],
     totalBookings: 89,
     services: [
       {
