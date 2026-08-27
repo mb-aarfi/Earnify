@@ -86,7 +86,7 @@ export default function LandingPage() {
                 Connect with trusted local service providers and get your work done with confidence.
               </p>
               <div className="mt-8">
-                <SearchBar showLocation className="max-w-xl" />
+                <SearchBar className="max-w-xl" />
               </div>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button size="lg" asChild>
