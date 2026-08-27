@@ -151,17 +151,15 @@ export default function LandingPage() {
             {services.map((service) => {
               const Icon = iconMap[service.icon];
               return (
-                <Link key={service.name} href={`/customer/search?q=${encodeURIComponent(service.name)}`}>
-                  <Card className="h-full hover:shadow-md transition-shadow cursor-pointer group">
-                    <CardContent className="p-5 text-center">
-                      <div className="mx-auto w-12 h-12 rounded-full bg-accent flex items-center justify-center group-hover:bg-primary/10 transition-colors">
-                        <Icon className="h-6 w-6 text-primary" />
-                      </div>
-                      <h3 className="font-semibold mt-3">{service.name}</h3>
-                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{service.description}</p>
-                    </CardContent>
-                  </Card>
-                </Link>
+                <Card key={service.name} className="h-full shadow-sm border border-border/60">
+                  <CardContent className="p-5 text-center">
+                    <div className="mx-auto w-12 h-12 rounded-full bg-accent flex items-center justify-center">
+                      <Icon className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="font-semibold mt-3">{service.name}</h3>
+                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{service.description}</p>
+                  </CardContent>
+                </Card>
               );
             })}
           </div>
