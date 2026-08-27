@@ -2,8 +2,8 @@ import type { CustomerProfile } from "@/types/user";
 
 export const mockCustomer: CustomerProfile = {
   id: "user_customer_1",
-  name: "Ali Hassan",
-  email: "ali.hassan@email.com",
+  name: "Saif Husain",
+  email: "saif.husain@gmail.com",
   phone: "+919876543210",
   profileImage: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
   role: "customer",
@@ -42,8 +42,8 @@ export const mockCustomer: CustomerProfile = {
 
 export const mockProviderUser = {
   id: "user_provider_1",
-  name: "Baqir Khan",
-  email: "baqir.khan@email.com",
+  name: "MuhammadBaqir",
+  email: "baqir.muha@gmail.com",
   phone: "+919999888877",
   profileImage: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
   role: "provider" as const,
