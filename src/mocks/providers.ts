@@ -1,7 +1,6 @@
 import type { Provider } from "@/types/provider";
 
 const singleProfileImage = "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80";
-const portfolioImages = [singleProfileImage];
 
 export const mockProviders: Provider[] = [
   {

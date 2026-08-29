@@ -11,7 +11,10 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
-import { setSession } from "@/lib/session";
+import {
+  getDefaultUserId,
+  setSession,
+} from "@/lib/session";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -26,6 +29,7 @@ interface LocationData {
 }
 
 interface MockSessionData {
+  userId: string;
   role: UserRole;
   name: string;
   phone: string;
@@ -297,6 +301,7 @@ function AuthPageContent() {
       }
 
       const sessionData: MockSessionData = {
+        userId: getDefaultUserId(selectedRole),
         role: selectedRole,
         name: name.trim(),
         phone: normalizeMobileNumber(mobile),
