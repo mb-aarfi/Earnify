@@ -1,4 +1,4 @@
-import type { CustomerProfile } from "@/types/user";
+import type { CustomerProfile, User } from "@/types/user";
 
 export const mockCustomer: CustomerProfile = {
   id: "user_customer_1",
@@ -40,12 +40,12 @@ export const mockCustomer: CustomerProfile = {
   ],
 };
 
-export const mockProviderUser = {
+export const mockProviderUser: User = {
   id: "user_provider_1",
   name: "MuhammadBaqir",
   email: "baqir.muha@gmail.com",
   phone: "+919999888877",
   profileImage: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
-  role: "provider" as const,
+  role: "provider",
   createdAt: "2023-03-20T08:00:00Z",
 };

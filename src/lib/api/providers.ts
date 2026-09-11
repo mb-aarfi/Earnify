@@ -1,21 +1,40 @@
 import { simulateApiCall } from "@/lib/api/client";
 import { mockProviders } from "@/mocks/providers";
 import { serviceCategories } from "@/mocks/categories";
-import type { Provider, ProviderFilters, ProviderSortOption } from "@/types/provider";
-import type { ServiceCategory } from "@/types/provider";
+import type {
+  Provider,
+  ProviderFilters,
+  ProviderSortOption,
+  ServiceCategory,
+} from "@/types/provider";
 import type { LocationSearchParams } from "@/types/location";
 
-function sortProviders(providers: Provider[], sortBy: ProviderSortOption): Provider[] {
+function sortProviders(
+  providers: Provider[],
+  sortBy: ProviderSortOption
+): Provider[] {
   const sorted = [...providers];
+
   switch (sortBy) {
     case "nearest":
-      return sorted.sort((a, b) => (a.distanceKm ?? 999) - (b.distanceKm ?? 999));
+      return sorted.sort(
+        (a, b) =>
+          (a.distanceKm ?? 999) - (b.distanceKm ?? 999)
+      );
+
     case "highest_rated":
       return sorted.sort((a, b) => b.rating - a.rating);
+
     case "lowest_price":
-      return sorted.sort((a, b) => a.startingPrice - b.startingPrice);
+      return sorted.sort(
+        (a, b) => a.startingPrice - b.startingPrice
+      );
+
     case "most_booked":
-      return sorted.sort((a, b) => b.totalBookings - a.totalBookings);
+      return sorted.sort(
+        (a, b) => b.totalBookings - a.totalBookings
+      );
+
     case "recommended":
     default:
       return sorted.sort(
@@ -32,42 +51,59 @@ function sortProviders(providers: Provider[], sortBy: ProviderSortOption): Provi
   }
 }
 
-function filterProviders(providers: Provider[], filters: ProviderFilters): Provider[] {
+function filterProviders(
+  providers: Provider[],
+  filters: ProviderFilters
+): Provider[] {
   let result = [...providers];
 
   if (filters.query) {
     const q = filters.query.toLowerCase();
+
     result = result.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.categoryName.toLowerCase().includes(q) ||
-        p.bio.toLowerCase().includes(q) ||
-        p.services.some((s) => s.name.toLowerCase().includes(q))
+      (provider) =>
+        provider.name.toLowerCase().includes(q) ||
+        provider.categoryName.toLowerCase().includes(q) ||
+        provider.bio.toLowerCase().includes(q) ||
+        provider.services.some((service) =>
+          service.name.toLowerCase().includes(q)
+        )
     );
   }
 
   if (filters.categoryId) {
-    result = result.filter((p) => p.categoryId === filters.categoryId);
+    result = result.filter(
+      (provider) => provider.categoryId === filters.categoryId
+    );
   }
 
-  if (filters.minRating) {
-    result = result.filter((p) => p.rating >= filters.minRating!);
+  if (filters.minRating !== undefined) {
+    result = result.filter(
+      (provider) => provider.rating >= filters.minRating
+    );
   }
 
-  if (filters.maxPrice) {
-    result = result.filter((p) => p.startingPrice <= filters.maxPrice!);
+  if (filters.maxPrice !== undefined) {
+    result = result.filter(
+      (provider) => provider.startingPrice <= filters.maxPrice
+    );
   }
 
   if (filters.verified) {
-    result = result.filter((p) => p.verified);
+    result = result.filter((provider) => provider.verified);
   }
 
   if (filters.availableToday) {
-    result = result.filter((p) => p.availableToday);
+    result = result.filter(
+      (provider) => provider.availableToday
+    );
   }
 
-  if (filters.maxDistanceKm) {
-    result = result.filter((p) => (p.distanceKm ?? 999) <= filters.maxDistanceKm!);
+  if (filters.maxDistanceKm !== undefined) {
+    result = result.filter(
+      (provider) =>
+        (provider.distanceKm ?? 999) <= filters.maxDistanceKm
+    );
   }
 
   if (filters.sortBy) {
@@ -86,22 +122,39 @@ export async function getNearbyProviders(
   params: LocationSearchParams & ProviderFilters
 ) {
   const { radiusKm, ...filters } = params;
+
   void params.latitude;
   void params.longitude;
+
   const combinedFilters = {
     ...filters,
     maxDistanceKm: radiusKm ?? filters.maxDistanceKm,
-    sortBy: filters.sortBy ?? ("recommended" as ProviderSortOption),
+    sortBy: filters.sortBy ?? "recommended",
   };
-  const filtered = filterProviders(mockProviders, combinedFilters);
+
+  const filtered = filterProviders(
+    mockProviders,
+    combinedFilters
+  );
+
   return simulateApiCall(filtered);
 }
 
 export async function getProviderById(id: string) {
-  const provider = mockProviders.find((p) => p.id === id);
+  const provider = mockProviders.find(
+    (provider) => provider.id === id
+  );
+
   if (!provider) {
-    return { success: false as const, error: { code: "NOT_FOUND", message: "Provider not found" } };
+    return {
+      success: false as const,
+      error: {
+        code: "NOT_FOUND",
+        message: "Provider not found",
+      },
+    };
   }
+
   return simulateApiCall(provider);
 }
 
@@ -110,10 +163,20 @@ export async function getServiceCategories() {
 }
 
 export async function getServiceCategoryBySlug(slug: string) {
-  const category = serviceCategories.find((c) => c.slug === slug);
+  const category = serviceCategories.find(
+    (category) => category.slug === slug
+  );
+
   if (!category) {
-    return { success: false as const, error: { code: "NOT_FOUND", message: "Category not found" } };
+    return {
+      success: false as const,
+      error: {
+        code: "NOT_FOUND",
+        message: "Category not found",
+      },
+    };
   }
+
   return simulateApiCall(category);
 }
 

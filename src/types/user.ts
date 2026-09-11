@@ -28,5 +28,8 @@ export interface CustomerProfile extends User {
 
 export interface MockSession {
   userId: string;
-  role: UserRole;
+  role: "customer" | "provider";
+  name?: string;
+  phone?: string;
+  locationAccess?: boolean;
 }

@@ -23,7 +23,7 @@ interface BookingStatusBadgeProps {
 export function BookingStatusBadge({ status, className }: BookingStatusBadgeProps) {
   const config = statusConfig[status];
   return (
-    <Badge variant={config.variant} className={cn(className)}>
+    <Badge variant={config.variant} className={className}>
       {config.label}
     </Badge>
   );

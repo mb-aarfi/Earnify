@@ -36,7 +36,7 @@ export const mockNotifications: Notification[] = [
     userId: "user_provider_1",
     type: "booking_request",
     title: "New Booking Request",
-    message: "Aisha Noor requested Switch Repair for Aug 29 at 11:30 AM.",
+    message: "Nadia Malik requested Switch Repair for Aug 29 at 11:30 AM.",
     read: true,
     createdAt: "2026-08-25T08:00:00Z",
     link: "/provider/bookings/booking_8",

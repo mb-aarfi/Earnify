@@ -47,6 +47,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/shared/loading-skeleton";
 import { EmptyState } from "@/components/shared/empty-state";
+import { ErrorState } from "@/components/shared/error-state";
 import type { Service } from "@/types/provider";
 
 const serviceSchema = z.object({
@@ -54,7 +55,7 @@ const serviceSchema = z.object({
   categoryId: z.string().min(1, "Category is required"),
   description: z.string().min(10, "Description required"),
   price: z.coerce.number().min(1, "Price required"),
-  durationMinutes: z.coerce.number().min(15),
+  durationMinutes: z.coerce.number().min(15, "Minimum duration is 15 minutes"),
   durationLabel: z.string().min(1, "Duration label required"),
   active: z.boolean(),
 });
@@ -71,7 +72,14 @@ function ServiceForm({
   loading?: boolean;
 }) {
   const { data: categories } = useServiceCategories();
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<ServiceFormData>({
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<ServiceFormData>({
     resolver: zodResolver(serviceSchema),
     defaultValues: {
       active: true,
@@ -84,64 +92,167 @@ function ServiceForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
-        <Label>Service Name</Label>
-        <Input className="mt-1" {...register("name")} />
-        {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
+        <Label htmlFor="service-name">Service Name</Label>
+        <Input
+          id="service-name"
+          className="mt-1"
+          {...register("name")}
+        />
+        {errors.name && (
+          <p className="text-sm text-destructive mt-1">
+            {errors.name.message}
+          </p>
+        )}
       </div>
+
       <div>
-        <Label>Category</Label>
-        <Select value={watch("categoryId")} onValueChange={(v) => setValue("categoryId", v)}>
-          <SelectTrigger className="mt-1"><SelectValue placeholder="Select category" /></SelectTrigger>
+        <Label htmlFor="service-category">Category</Label>
+        <Select
+          value={watch("categoryId")}
+          onValueChange={(value) =>
+            setValue("categoryId", value, { shouldValidate: true })
+          }
+        >
+          <SelectTrigger id="service-category" className="mt-1">
+            <SelectValue placeholder="Select category" />
+          </SelectTrigger>
           <SelectContent>
-            {categories?.map((c) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+            {categories?.map((category) => (
+              <SelectItem key={category.id} value={category.id}>
+                {category.name}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
-        {errors.categoryId && <p className="text-sm text-destructive">{errors.categoryId.message}</p>}
+
+        {errors.categoryId && (
+          <p className="text-sm text-destructive mt-1">
+            {errors.categoryId.message}
+          </p>
+        )}
       </div>
+
       <div>
-        <Label>Description</Label>
-        <Textarea className="mt-1" {...register("description")} />
-        {errors.description && <p className="text-sm text-destructive">{errors.description.message}</p>}
+        <Label htmlFor="service-description">Description</Label>
+        <Textarea
+          id="service-description"
+          className="mt-1"
+          {...register("description")}
+        />
+        {errors.description && (
+          <p className="text-sm text-destructive mt-1">
+            {errors.description.message}
+          </p>
+        )}
       </div>
+
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <Label>Price (₹)</Label>
-          <Input type="number" className="mt-1" {...register("price")} />
+          <Label htmlFor="service-price">Price (₹)</Label>
+          <Input
+            id="service-price"
+            type="number"
+            min={1}
+            className="mt-1"
+            {...register("price")}
+          />
+          {errors.price && (
+            <p className="text-sm text-destructive mt-1">
+              {errors.price.message}
+            </p>
+          )}
         </div>
+
         <div>
-          <Label>Duration Label</Label>
-          <Input className="mt-1" placeholder="1 hour" {...register("durationLabel")} />
+          <Label htmlFor="service-duration">Duration (minutes)</Label>
+          <Input
+            id="service-duration"
+            type="number"
+            min={15}
+            className="mt-1"
+            {...register("durationMinutes")}
+          />
+          {errors.durationMinutes && (
+            <p className="text-sm text-destructive mt-1">
+              {errors.durationMinutes.message}
+            </p>
+          )}
         </div>
       </div>
+
+      <div>
+        <Label htmlFor="service-duration-label">Duration Label</Label>
+        <Input
+          id="service-duration-label"
+          className="mt-1"
+          placeholder="1 hour"
+          {...register("durationLabel")}
+        />
+        {errors.durationLabel && (
+          <p className="text-sm text-destructive mt-1">
+            {errors.durationLabel.message}
+          </p>
+        )}
+      </div>
+
       <div className="flex items-center gap-2">
-        <Switch checked={watch("active")} onCheckedChange={(v) => setValue("active", v)} />
+        <Switch
+          checked={watch("active")}
+          onCheckedChange={(value) =>
+            setValue("active", value, { shouldValidate: true })
+          }
+        />
         <Label>Active</Label>
       </div>
-      <Button type="submit" className="w-full" loading={loading}>Save Service</Button>
+
+      <Button type="submit" className="w-full" loading={loading}>
+        Save Service
+      </Button>
     </form>
   );
 }
 
 export default function ProviderServicesPage() {
-  const { data: services, isLoading } = useProviderServices();
+  const {
+    data: services,
+    isLoading,
+    error,
+    refetch,
+  } = useProviderServices();
+
   const createService = useCreateService();
   const updateService = useUpdateService();
   const deleteService = useDeleteService();
+
   const [addOpen, setAddOpen] = useState(false);
   const [editService, setEditService] = useState<Service | null>(null);
 
-  if (isLoading) return <Skeleton className="h-96 w-full" />;
+  if (isLoading) {
+    return <Skeleton className="h-96 w-full" />;
+  }
+
+  if (error) {
+    return <ErrorState onRetry={() => refetch()} />;
+  }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">My Services</h1>
+
         <Dialog open={addOpen} onOpenChange={setAddOpen}>
           <DialogTrigger asChild>
-            <Button><Plus className="h-4 w-4 mr-2" />Add Service</Button>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Service
+            </Button>
           </DialogTrigger>
+
           <DialogContent>
-            <DialogHeader><DialogTitle>Add Service</DialogTitle></DialogHeader>
+            <DialogHeader>
+              <DialogTitle>Add Service</DialogTitle>
+            </DialogHeader>
+
             <ServiceForm
               onSubmit={async (data) => {
                 await createService.mutateAsync(data);
@@ -154,7 +265,12 @@ export default function ProviderServicesPage() {
       </div>
 
       {!services || services.length === 0 ? (
-        <EmptyState title="No services yet" description="Add your first service to start receiving bookings." actionLabel="Add Service" onAction={() => setAddOpen(true)} />
+        <EmptyState
+          title="No services yet"
+          description="Add your first service to start receiving bookings."
+          actionLabel="Add Service"
+          onAction={() => setAddOpen(true)}
+        />
       ) : (
         <div className="space-y-4">
           {services.map((service) => (
@@ -164,54 +280,117 @@ export default function ProviderServicesPage() {
                   <div>
                     <div className="flex items-center gap-2">
                       <h3 className="font-semibold">{service.name}</h3>
-                      <Badge variant={service.active ? "success" : "secondary"}>
+
+                      <Badge
+                        variant={service.active ? "success" : "secondary"}
+                      >
                         {service.active ? "Active" : "Inactive"}
                       </Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground mt-1">{service.description}</p>
+
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {service.description}
+                    </p>
+
                     <div className="flex gap-4 mt-2 text-sm">
-                      <PriceDisplay amount={service.price} prefix="" />
-                      <span className="text-muted-foreground">{service.durationLabel}</span>
+                      <PriceDisplay
+                        amount={service.price}
+                        prefix=""
+                      />
+                      <span className="text-muted-foreground">
+                        {service.durationLabel}
+                      </span>
                     </div>
                   </div>
+
                   <div className="flex gap-2">
-                    <Dialog open={editService?.id === service.id} onOpenChange={(o) => !o && setEditService(null)}>
+                    <Dialog
+                      open={editService?.id === service.id}
+                      onOpenChange={(open) =>
+                        !open && setEditService(null)
+                      }
+                    >
                       <DialogTrigger asChild>
-                        <Button variant="outline" size="sm" onClick={() => setEditService(service)}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          disabled={updateService.isPending}
+                          onClick={() => setEditService(service)}
+                        >
                           <Pencil className="h-4 w-4" />
                         </Button>
                       </DialogTrigger>
+
                       <DialogContent>
-                        <DialogHeader><DialogTitle>Edit Service</DialogTitle></DialogHeader>
+                        <DialogHeader>
+                          <DialogTitle>Edit Service</DialogTitle>
+                        </DialogHeader>
+
                         <ServiceForm
                           defaultValues={service}
                           onSubmit={async (data) => {
-                            await updateService.mutateAsync({ id: service.id, data });
+                            await updateService.mutateAsync({
+                              id: service.id,
+                              data,
+                            });
                             setEditService(null);
                           }}
                           loading={updateService.isPending}
                         />
                       </DialogContent>
                     </Dialog>
+
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => updateService.mutate({ id: service.id, data: { active: !service.active } })}
+                      disabled={updateService.isPending}
+                      onClick={() =>
+                        updateService.mutate({
+                          id: service.id,
+                          data: { active: !service.active },
+                        })
+                      }
                     >
                       {service.active ? "Deactivate" : "Activate"}
                     </Button>
+
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <Button variant="outline" size="sm"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          disabled={
+                            deleteService.isPending ||
+                            updateService.isPending
+                          }
+                        >
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
                       </AlertDialogTrigger>
+
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle>Delete service?</AlertDialogTitle>
-                          <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+                          <AlertDialogTitle>
+                            Delete service?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone.
+                          </AlertDialogDescription>
                         </AlertDialogHeader>
+
                         <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => deleteService.mutate(service.id)}>Delete</AlertDialogAction>
+                          <AlertDialogCancel>
+                            Cancel
+                          </AlertDialogCancel>
+
+                          <AlertDialogAction
+                            disabled={deleteService.isPending}
+                            onClick={() =>
+                              deleteService.mutate(service.id)
+                            }
+                          >
+                            Delete
+                          </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>

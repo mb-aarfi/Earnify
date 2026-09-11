@@ -2,6 +2,7 @@ import { simulateApiCall } from "@/lib/api/client";
 import { generateId } from "@/lib/utils";
 import { mockReviews } from "@/mocks/reviews";
 import type { CreateReviewInput, RatingDistribution } from "@/types/review";
+import { mockCustomer } from "@/mocks/users";
 
 export async function getReviews(providerId: string) {
   const reviews = mockReviews
@@ -28,8 +29,8 @@ export async function createReview(input: CreateReviewInput) {
   const review = {
     id: generateId("rev"),
     providerId: input.providerId,
-    customerId: "user_customer_1",
-    customerName: "Ali Hassan",
+    customerId: mockCustomer.id,
+    customerName: mockCustomer.name,
     customerImage: "https://i.pravatar.cc/150?u=customer1",
     bookingId: input.bookingId,
     rating: input.rating,

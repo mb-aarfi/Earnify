@@ -8,7 +8,7 @@ import { BookingCardSkeleton } from "@/components/shared/loading-skeleton";
 import { EmptyState } from "@/components/shared/empty-state";
 import { ErrorState } from "@/components/shared/error-state";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { BookingStatus } from "@/types/booking";
+import type { Booking, BookingStatus } from "@/types/booking";
 
 const tabs: { value: string; label: string; filter?: BookingStatus | "upcoming" }[] = [
   { value: "all", label: "All" },
@@ -18,15 +18,18 @@ const tabs: { value: string; label: string; filter?: BookingStatus | "upcoming" 
   { value: "cancelled", label: "Cancelled", filter: "cancelled" },
 ];
 
-function filterBookings(bookings: ReturnType<typeof useBookings>["data"], tab: string) {
+function filterBookings(bookings: Booking[] | undefined, tab: string) {
   if (!bookings) return [];
+
   if (tab === "all") return bookings;
+
   if (tab === "upcoming") {
-    return bookings.filter((b) =>
-      ["accepted", "confirmed", "in_progress"].includes(b.status)
+    return bookings.filter((booking) =>
+      ["accepted", "confirmed", "in_progress"].includes(booking.status)
     );
   }
-  return bookings.filter((b) => b.status === tab);
+
+  return bookings.filter((booking) => booking.status === tab);
 }
 
 export default function CustomerBookingsPage() {

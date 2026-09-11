@@ -18,7 +18,7 @@ import Image from "next/image";
 const profileSchema = z.object({
   name: z.string().min(2, "Name is required"),
   email: z.string().email("Invalid email"),
-  phone: z.string().min(10, "Valid phone required"),
+  phone: z.string().regex(/^\d{10}$/, "Please enter a valid 10-digit mobile number"),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;

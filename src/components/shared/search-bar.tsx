@@ -23,11 +23,17 @@ export function SearchBar({
   const router = useRouter();
   const { query, setQuery, location, addRecentSearch } = useSearchStore();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const q = (e.target as HTMLFormElement).search.value as string;
+
+    const formData = new FormData(e.currentTarget);
+    const q = String(formData.get("search") ?? "").trim();
+
+    if (!q) return;
+
     setQuery(q);
     addRecentSearch(q);
+
     if (onSearch) {
       onSearch(q);
     } else {

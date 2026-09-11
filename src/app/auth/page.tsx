@@ -38,10 +38,10 @@ interface MockSessionData {
 }
 
 /**
- * Frontend-only mock OTP generator.
+ * Only mock OTP generator.
  *
  * IMPORTANT:
- * In production, OTP generation must happen on the backend.
+ * In production, otp generation must happen on the backend.
  * This function exists only until the real authentication API is connected.
  */
 function generateMockOtp(): string {
@@ -73,8 +73,8 @@ function validateUserDetails(
     return "Please enter a valid name.";
   }
 
-  if (!/^\d{10,15}$/.test(normalizedMobile)) {
-    return "Please enter a valid mobile number.";
+  if (!/^\d{10}$/.test(normalizedMobile)) {
+    return "Please enter a valid 10 digit mobile number.";
   }
 
   return null;
@@ -307,7 +307,7 @@ function AuthPageContent() {
         phone: normalizeMobileNumber(mobile),
         locationAccess:
           locationStatus === "granted",
-        location: locationData ?? undefined,
+        
       };
 
       /*

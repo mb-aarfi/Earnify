@@ -8,7 +8,7 @@ export async function handleCallProvider(providerId: string) {
   if (res.success && res.data && "phone" in res.data) {
     window.location.href = `tel:${res.data.phone}`;
   } else {
-    toast.error("Could not retrieve phone number");
+    toast.error(res.error?.message ?? "Could not retrieve phone number");
   }
 }
 

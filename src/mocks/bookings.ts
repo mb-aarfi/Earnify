@@ -7,7 +7,7 @@ export const mockBookings: Booking[] = [
     customerName: "Ali Hassan",
     customerPhone: "+919876543210",
     providerId: "prov_1",
-    providerName: "Baqir Khan",
+    providerName: "Muhammad Baqir",
     providerImage: "https://i.pravatar.cc/150?u=provider1",
     serviceId: "svc_1_2",
     serviceName: "Switch Repair",
@@ -254,7 +254,3 @@ export const mockBookings: Booking[] = [
     updatedAt: "2026-08-24T10:00:00Z",
   },
 ];
-
-export function resetMockBookings(): void {
-  // Used for testing if needed
-}

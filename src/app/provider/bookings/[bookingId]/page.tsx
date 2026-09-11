@@ -85,7 +85,7 @@ export default function ProviderBookingDetailPage({
         )}
         {booking.status === "pending" && (
           <>
-            <Button onClick={() => updateStatus.mutate({ id: booking.id, status: "accepted" })}>Accept</Button>
+            <Button disabled={updateStatus.isPending} onClick={() => updateStatus.mutate({ id: booking.id, status: "accepted" })}>Accept</Button>
             <Button variant="outline" onClick={() => updateStatus.mutate({ id: booking.id, status: "rejected" })}>Reject</Button>
           </>
         )}

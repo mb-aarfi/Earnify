@@ -9,10 +9,22 @@ export async function getNotifications(userId: string) {
 }
 
 export async function markNotificationRead(id: string) {
-  const notification = mockNotifications.find((n) => n.id === id);
-  if (notification) {
-    notification.read = true;
+  const notification = mockNotifications.find(
+    (notification) => notification.id === id
+  );
+
+  if (!notification) {
+    return {
+      success: false as const,
+      error: {
+        code: "NOT_FOUND",
+        message: "Notification not found",
+      },
+    };
   }
+
+  notification.read = true;
+
   return simulateApiCall({ success: true });
 }
 

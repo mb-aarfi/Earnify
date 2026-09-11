@@ -3,19 +3,41 @@ import { generateId } from "@/lib/utils";
 import { mockBookings } from "@/mocks/bookings";
 import { mockProviders } from "@/mocks/providers";
 import { mockCustomer } from "@/mocks/users";
-import type { Booking, BookingStatus, CreateBookingInput, BookingTimelineEvent } from "@/types/booking";
+import type {
+  Booking,
+  BookingStatus,
+  CreateBookingInput,
+  BookingTimelineEvent,
+} from "@/types/booking";
+
+const allowedTransitions: Record<BookingStatus, BookingStatus[]> = {
+  pending: ["accepted", "rejected", "cancelled"],
+  accepted: ["confirmed", "cancelled"],
+  rejected: [],
+  confirmed: ["in_progress", "cancelled"],
+  in_progress: ["completed"],
+  completed: [],
+  cancelled: [],
+};
 
 export async function createBooking(input: CreateBookingInput) {
   const provider = mockProviders.find((p) => p.id === input.providerId);
   const service = provider?.services.find((s) => s.id === input.serviceId);
-  const address = mockCustomer.addresses.find((a) => a.id === input.addressId);
+  const address = mockCustomer.addresses.find(
+    (a) => a.id === input.addressId
+  );
 
   if (!provider || !service || !address) {
     return {
       success: false as const,
-      error: { code: "VALIDATION_ERROR", message: "Invalid booking data" },
+      error: {
+        code: "VALIDATION_ERROR",
+        message: "Invalid booking data",
+      },
     };
   }
+
+  const now = new Date().toISOString();
 
   const booking: Booking = {
     id: generateId("booking"),
@@ -42,65 +64,152 @@ export async function createBooking(input: CreateBookingInput) {
     currency: service.currency,
     status: "pending",
     distanceKm: provider.distanceKm,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: now,
+    updatedAt: now,
   };
 
   mockBookings.unshift(booking);
-  return simulateApiCall({ id: booking.id, status: booking.status as BookingStatus });
+
+  return simulateApiCall({
+    id: booking.id,
+    status: booking.status,
+  });
 }
 
-export async function getBookings(customerId?: string, status?: BookingStatus) {
+export async function getBookings(
+  customerId?: string,
+  status?: BookingStatus
+) {
   let bookings = [...mockBookings];
+
   if (customerId) {
-    bookings = bookings.filter((b) => b.customerId === customerId);
+    bookings = bookings.filter(
+      (booking) => booking.customerId === customerId
+    );
   }
+
   if (status) {
-    bookings = bookings.filter((b) => b.status === status);
+    bookings = bookings.filter(
+      (booking) => booking.status === status
+    );
   }
-  bookings.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+  bookings.sort(
+    (a, b) =>
+      new Date(b.createdAt).getTime() -
+      new Date(a.createdAt).getTime()
+  );
+
   return simulateApiCall(bookings);
 }
 
 export async function getBookingById(id: string) {
-  const booking = mockBookings.find((b) => b.id === id);
+  const booking = mockBookings.find((booking) => booking.id === id);
+
   if (!booking) {
-    return { success: false as const, error: { code: "NOT_FOUND", message: "Booking not found" } };
+    return {
+      success: false as const,
+      error: {
+        code: "NOT_FOUND",
+        message: "Booking not found",
+      },
+    };
   }
+
   return simulateApiCall(booking);
 }
 
 export async function cancelBooking(id: string) {
-  const booking = mockBookings.find((b) => b.id === id);
+  const booking = mockBookings.find((booking) => booking.id === id);
+
   if (!booking) {
-    return { success: false as const, error: { code: "NOT_FOUND", message: "Booking not found" } };
+    return {
+      success: false as const,
+      error: {
+        code: "NOT_FOUND",
+        message: "Booking not found",
+      },
+    };
   }
+
+  if (!allowedTransitions[booking.status].includes("cancelled")) {
+    return {
+      success: false as const,
+      error: {
+        code: "INVALID_STATUS",
+        message: "Booking cannot be cancelled in its current status",
+      },
+    };
+  }
+
   booking.status = "cancelled";
   booking.updatedAt = new Date().toISOString();
+
   return simulateApiCall(booking);
 }
 
-export async function getProviderBookings(providerId: string, status?: BookingStatus) {
-  let bookings = mockBookings.filter((b) => b.providerId === providerId);
+export async function getProviderBookings(
+  providerId: string,
+  status?: BookingStatus
+) {
+  let bookings = mockBookings.filter(
+    (booking) => booking.providerId === providerId
+  );
+
   if (status) {
-    bookings = bookings.filter((b) => b.status === status);
+    bookings = bookings.filter(
+      (booking) => booking.status === status
+    );
   }
-  bookings.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+  bookings.sort(
+    (a, b) =>
+      new Date(b.createdAt).getTime() -
+      new Date(a.createdAt).getTime()
+  );
+
   return simulateApiCall(bookings);
 }
 
-export async function updateBookingStatus(id: string, status: BookingStatus) {
-  const booking = mockBookings.find((b) => b.id === id);
+export async function updateBookingStatus(
+  id: string,
+  status: BookingStatus
+) {
+  const booking = mockBookings.find((booking) => booking.id === id);
+
   if (!booking) {
-    return { success: false as const, error: { code: "NOT_FOUND", message: "Booking not found" } };
+    return {
+      success: false as const,
+      error: {
+        code: "NOT_FOUND",
+        message: "Booking not found",
+      },
+    };
   }
+
+  if (!allowedTransitions[booking.status].includes(status)) {
+    return {
+      success: false as const,
+      error: {
+        code: "INVALID_STATUS_TRANSITION",
+        message: `Cannot change booking status from ${booking.status} to ${status}`,
+      },
+    };
+  }
+
   booking.status = status;
   booking.updatedAt = new Date().toISOString();
+
   return simulateApiCall(booking);
 }
 
-export function getBookingTimeline(status: BookingStatus): BookingTimelineEvent[] {
-  const steps: { status: BookingStatus; label: string }[] = [
+export function getBookingTimeline(
+  status: BookingStatus
+): BookingTimelineEvent[] {
+  const steps: {
+    status: BookingStatus;
+    label: string;
+  }[] = [
     { status: "pending", label: "Booking requested" },
     { status: "accepted", label: "Provider accepted" },
     { status: "confirmed", label: "Appointment confirmed" },
@@ -124,6 +233,6 @@ export function getBookingTimeline(status: BookingStatus): BookingTimelineEvent[
   return steps.map((step, index) => ({
     ...step,
     completed: currentIndex >= index,
-    timestamp: index <= currentIndex ? new Date().toISOString() : undefined,
+    timestamp: undefined,
   }));
 }

@@ -8,13 +8,34 @@ const providerId = "prov_1";
 
 export async function getProviderServices(pid = providerId) {
   const provider = mockProviders.find((p) => p.id === pid);
-  return simulateApiCall(provider?.services ?? []);
+
+  if (!provider) {
+    return {
+      success: false as const,
+      error: {
+        code: "NOT_FOUND",
+        message: "Provider not found",
+      },
+    };
+  }
+
+  return simulateApiCall(provider.services);
 }
 
-export async function createProviderService(input: ServiceInput, pid = providerId) {
+export async function createProviderService(
+  input: ServiceInput,
+  pid = providerId
+) {
   const provider = mockProviders.find((p) => p.id === pid);
+
   if (!provider) {
-    return { success: false as const, error: { code: "NOT_FOUND", message: "Provider not found" } };
+    return {
+      success: false as const,
+      error: {
+        code: "NOT_FOUND",
+        message: "Provider not found",
+      },
+    };
   }
 
   const service: Service = {
@@ -22,7 +43,9 @@ export async function createProviderService(input: ServiceInput, pid = providerI
     ...input,
     currency: "INR",
   };
+
   provider.services.push(service);
+
   return simulateApiCall(service);
 }
 
@@ -32,19 +55,58 @@ export async function updateProviderService(
   pid = providerId
 ) {
   const provider = mockProviders.find((p) => p.id === pid);
-  const service = provider?.services.find((s) => s.id === serviceId);
+  const service = provider?.services.find(
+    (service) => service.id === serviceId
+  );
+
   if (!service) {
-    return { success: false as const, error: { code: "NOT_FOUND", message: "Service not found" } };
+    return {
+      success: false as const,
+      error: {
+        code: "NOT_FOUND",
+        message: "Service not found",
+      },
+    };
   }
+
   Object.assign(service, input);
+
   return simulateApiCall(service);
 }
 
-export async function deleteProviderService(serviceId: string, pid = providerId) {
+export async function deleteProviderService(
+  serviceId: string,
+  pid = providerId
+) {
   const provider = mockProviders.find((p) => p.id === pid);
+
   if (!provider) {
-    return { success: false as const, error: { code: "NOT_FOUND", message: "Provider not found" } };
+    return {
+      success: false as const,
+      error: {
+        code: "NOT_FOUND",
+        message: "Provider not found",
+      },
+    };
   }
-  provider.services = provider.services.filter((s) => s.id !== serviceId);
+
+  const serviceExists = provider.services.some(
+    (service) => service.id === serviceId
+  );
+
+  if (!serviceExists) {
+    return {
+      success: false as const,
+      error: {
+        code: "NOT_FOUND",
+        message: "Service not found",
+      },
+    };
+  }
+
+  provider.services = provider.services.filter(
+    (service) => service.id !== serviceId
+  );
+
   return simulateApiCall({ deleted: true });
 }

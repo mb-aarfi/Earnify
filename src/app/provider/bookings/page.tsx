@@ -67,10 +67,11 @@ export default function ProviderBookingsPage() {
                               </p>
                             </div>
                             <div className="flex gap-2">
-                              <Button size="sm" onClick={() => updateStatus.mutate({ id: booking.id, status: "accepted" })}>
+                              
+                              <Button size="sm" disabled={updateStatus.isPending} onClick={() => updateStatus.mutate({ id: booking.id, status: "accepted" })}>
                                 Accept
                               </Button>
-                              <Button size="sm" variant="outline" onClick={() => updateStatus.mutate({ id: booking.id, status: "rejected" })}>
+                              <Button size="sm" disabled={updateStatus.isPending} variant="outline" onClick={() => updateStatus.mutate({ id: booking.id, status: "rejected" })}>
                                 Reject
                               </Button>
                               <Button size="sm" variant="ghost" asChild>

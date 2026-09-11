@@ -1,12 +1,7 @@
+import type { MockSession } from "@/types/user";
+
 const SESSION_KEY = "earnify_session";
 
-export interface MockSession {
-  userId: string;
-  role: "customer" | "provider";
-  name?: string;
-  phone?: string;
-  locationAccess?: boolean;
-}
 
 export function getSession(): MockSession | null {
   if (typeof window === "undefined") return null;

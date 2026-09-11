@@ -115,9 +115,10 @@ export function useCreateReview() {
       return res.data!;
     },
     onSuccess: (_, vars) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.reviews(vars.providerId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.reviews(vars.providerId), });
+      queryClient.invalidateQueries({ queryKey: queryKeys.ratingDistribution(vars.providerId), });
       toast.success("Review submitted");
-    },
+   },
     onError: (error: Error) => toast.error(error.message),
   });
 }
@@ -173,6 +174,7 @@ export function useLocation() {
     queryKey: queryKeys.location,
     queryFn: async () => {
       const res = await getCurrentLocation();
+      if (!res.success) throw new Error(res.error?.message);
       return res.data!;
     },
   });

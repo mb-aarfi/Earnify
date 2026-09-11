@@ -1,14 +1,15 @@
 import type { ProviderFilters } from "@/types/provider";
 import type { LocationSearchParams } from "@/types/location";
+import type { BookingStatus } from "@/types/booking";
 
 export const queryKeys = {
   providers: (filters?: ProviderFilters) => ["providers", filters] as const,
   nearbyProviders: (params?: LocationSearchParams & ProviderFilters) => ["nearbyProviders", params] as const,
   provider: (id: string) => ["provider", id] as const,
   categories: ["categories"] as const,
-  bookings: (customerId?: string, status?: string) => ["bookings", customerId, status] as const,
+  bookings: (customerId?: string, status?: BookingStatus) => ["bookings", customerId, status] as const,
   booking: (id: string) => ["booking", id] as const,
-  providerBookings: (providerId: string, status?: string) =>
+  providerBookings: (providerId: string, status?: BookingStatus) =>
     ["providerBookings", providerId, status] as const,
   providerServices: (providerId: string) => ["providerServices", providerId] as const,
   providerProfile: (providerId: string) => ["providerProfile", providerId] as const,

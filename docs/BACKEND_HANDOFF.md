@@ -148,3 +148,10 @@ Frontend shows "Estimated Price" and "Payment integration coming soon". No payme
 4. Run `npm run build` to verify TypeScript compatibility
 
 See `docs/API_CONTRACT.md` for full endpoint specifications.
+
+
+
+createBooking() currently uses mockCustomer; backend must derive customer identity from authenticated session.
+
+
+Provider ID must come from authenticated session/user context, not a hardcoded value.
