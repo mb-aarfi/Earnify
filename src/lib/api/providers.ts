@@ -78,14 +78,18 @@ function filterProviders(
   }
 
   if (filters.minRating !== undefined) {
+    const minRating = filters.minRating;
+
     result = result.filter(
-      (provider) => provider.rating >= filters.minRating
+      (provider) => provider.rating >= minRating
     );
   }
 
   if (filters.maxPrice !== undefined) {
+    const maxPrice = filters.maxPrice;
+
     result = result.filter(
-      (provider) => provider.startingPrice <= filters.maxPrice
+      (provider) => provider.startingPrice <= maxPrice
     );
   }
 
@@ -100,9 +104,11 @@ function filterProviders(
   }
 
   if (filters.maxDistanceKm !== undefined) {
+    const maxDistanceKm = filters.maxDistanceKm;
+
     result = result.filter(
       (provider) =>
-        (provider.distanceKm ?? 999) <= filters.maxDistanceKm
+        (provider.distanceKm ?? 999) <= maxDistanceKm
     );
   }
 
